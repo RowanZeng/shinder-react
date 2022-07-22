@@ -1,8 +1,11 @@
-import React from "react";
-import {Link} from 'react-router-dom';
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import ThemeContext, { themes } from "./ThemeContext";
+import AuthContext from "./AuthContext";
 
 export default function Navbar() {
-
+    const { name, bgc, fc, setTheme } = useContext(ThemeContext);
+    const { authorized, account, logout } = useContext(AuthContext);
 
     return (
         <nav className="navbar navbar-expand-lg bg-light">
@@ -27,42 +30,40 @@ export default function Navbar() {
                 >
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                        <Link className="nav-link" to="/">Home</Link>
+                            <Link className="nav-link" to="/">
+                                Home
+                            </Link>
                         </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/login">login</Link>
-                        </li>
-                        <li className="nav-item dropdown">
-                            <a
-                                className="nav-link dropdown-toggle"
-                                href="#/"
-                                role="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                            >
-                                Dropdown
-                            </a>
-                            <ul className="dropdown-menu">
-                                <li>
-                                    <a className="dropdown-item" href="#/">
-                                        Action
-                                    </a>
+                        {Object.keys(themes).map((n) => {
+                            return (
+                                <li className="nav-item" key={n}>
+                                    <button
+                                        className="btn"
+                                        onClick={() => setTheme(themes[n])}
+                                    >
+                                        {n + ((n===name) ? ' v' : '')}
+                                    </button>
                                 </li>
-                                <li>
-                                    <a className="dropdown-item" href="#/">
-                                        Another action
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr className="dropdown-divider" />
-                                </li>
-                                <li>
-                                    <a className="dropdown-item" href="#/">
-                                        Something else here
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                            );
+                        })}
+                    </ul>
+
+                    <ul className="navbar-nav mb-2 mb-lg-0">
+                        {authorized ? (<>
+                            <li className="nav-item">{account}</li>
+                            <li className="nav-item">
+                                <button className="btn btn-warning"  onClick={()=>logout()}>
+                                    登出
+                                </button>
+                            </li>
+                            </>
+                        ) : (
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/login">
+                                    登入
+                                </Link>
+                            </li>
+                        )}
                     </ul>
                 </div>
             </div>

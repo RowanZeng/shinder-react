@@ -1,8 +1,9 @@
 import React, { useState, useContext } from "react";
 import { LOGIN_API } from "./../config/ajax-path";
-import ThemeContext, {themes} from "./ThemeContext";
+import ThemeContext from "./ThemeContext";
 import AuthContext from "./AuthContext";
 import { useNavigate } from "react-router-dom";
+
 
 export default function LoginForm() {
     const [myform, setMyform] = useState({
@@ -43,7 +44,6 @@ export default function LoginForm() {
                         authorized: true,
                     });
                     navigate('/');
-
                 } else {
                     alert('帳密錯誤');
                 }
