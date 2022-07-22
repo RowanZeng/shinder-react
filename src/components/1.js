@@ -1,96 +1,34 @@
-import React, { useState, useContext } from "react";
-import { LOGIN_API } from "./../config/ajax-path";
-import ThemeContext from "./ThemeContext";
-import AuthContext from "./AuthContext";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import AppAuth from "./AppAuth";
+import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import LoginForm from "./components/LoginForm";
+import MyDraw from "./components/MyDraw";
 
+import Container from "./Container";
 
-export default function LoginForm() {
-    const [myform, setMyform] = useState({
-        account: "",
-        password: "",
-    });
-    const themeContext = useContext(ThemeContext)
-    const {setAuth} = useContext(AuthContext)
-    const navigate = useNavigate();
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+    <React.StrictMode>
+        <BrowserRouter>
+            <Container>
+                <Navbar />
+                <Routes>
+                    <Route path="/" element={<App />} />
+                    <Route path="/list-auth" element={<AppAuth />} />
+                    <Route path="/login" element={<LoginForm />} />
+                    <Route path="/my-draw" element={<MyDraw />} />
+                </Routes>
+            </Container>
+        </BrowserRouter>
+    </React.StrictMode>
+);
 
-    const changeFields = (event) => {
-        const id = event.target.id;
-        const val = event.target.value;
-        console.log({ id, val });
-        setMyform({ ...myform, [id]: val });
-    };
-
-    const whenSubmit = (event) => {
-        event.preventDefault();
-
-        console.log(myform);
-        // TODO: 欄位檢查
-
-        fetch(LOGIN_API, {
-            method: "POST",
-            body: JSON.stringify(myform),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((r) => r.json())
-            .then((result) => {
-                console.log(result);
-                if(result.success){
-                    localStorage.setItem('auth', JSON.stringify(result.data));
-                    setAuth({
-                        ...result.data,
-                        authorized: true,
-                    });
-                    navigate('/');
-                } else {
-                    alert('帳密錯誤');
-                }
-            });
-    };
-
-    return (
-        <div className="container" style={{
-            backgroundColor: themeContext.bgc,
-            color: themeContext.fc,
-        }}>
-            <div className="row">
-                <div className="col-lg-6">
-                    <form name="form1" onSubmit={whenSubmit}>
-                        <div className="mb-3">
-                            <label htmlFor="account" className="form-label">
-                                Account
-                            </label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="account"
-                                name="account"
-                                value={myform.account}
-                                onChange={changeFields}
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="password" className="form-label">
-                                Password
-                            </label>
-                            <input
-                                type="password"
-                                className="form-control"
-                                id="password"
-                                name="password"
-                                value={myform.password}
-                                onChange={changeFields}
-                            />
-                        </div>
-
-                        <button type="submit" className="btn btn-primary">
-                            Submit
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    );
-}
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();

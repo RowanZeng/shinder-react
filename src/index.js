@@ -2,12 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
+import AppAuth from "./AppAuth";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import LoginForm from "./components/LoginForm";
 // import ThemeContext, {themes} from "./components/ThemeContext";
+import MyDraw from "./components/MyDraw";
 import Container from "./Container";
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -18,7 +21,9 @@ root.render(
                     <Navbar />
                     <Routes>
                         <Route path="/" element={<App />} />
+                        <Route path="/list-auth" element={<AppAuth />} />
                         <Route path="/login" element={<LoginForm />} />
+                        <Route path="/my-draw" element={<MyDraw />} />
                     </Routes>
                 {/* </ThemeContext.Provider> */}
             </Container>
